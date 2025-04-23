@@ -36,25 +36,26 @@ jobs:
         # Install Android SDK if not already installed
         mkdir -p $HOME/android-sdk
         cd $HOME/android-sdk
+
+        # Download the command-line tools package
         wget https://dl.google.com/android/repository/commandlinetools-linux-7583922_latest.zip
         unzip commandlinetools-linux-7583922_latest.zip
         rm commandlinetools-linux-7583922_latest.zip
 
-        # Accept licenses and install required packages
+        # Set environment variables
         export ANDROID_HOME=$HOME/android-sdk
+        export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
         echo "ANDROID_HOME=$ANDROID_HOME" >> $GITHUB_ENV
+        echo "PATH=$PATH" >> $GITHUB_ENV
 
+        # Accept licenses
         yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
+
+        # Install necessary Android SDK components
         $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platform-tools" "build-tools;36.0.0" "platforms;android-30" "extras;google;m2repository" "extras;android;m2repository" "system-images;android-30;google_apis;x86_64"
 
     - name: Build APK
       run: |
+        # Run Buildozer commands
         buildozer android clean
         buildozer android debug
-
-
-    - name: Upload APK
-      uses: actions/upload-artifact@v4
-      with:
-        name: InstaFollowers-APK
-        path: bin/*.apk
