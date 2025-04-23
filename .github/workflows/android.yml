@@ -1,0 +1,39 @@
+name: Build Android APK
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install system dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y build-essential ccache git zip unzip openjdk-17-jdk python3-pip python3-setuptools libffi-dev libssl-dev libxml2-dev libxslt1-dev zlib1g-dev
+
+    - name: Install Buildozer and Cython
+      run: |
+        python3 -m pip install --upgrade pip
+        pip install cython==0.29.33 virtualenv
+        pip install buildozer
+
+    - name: Build APK
+      run: |
+        buildozer android debug
+
+    - name: Upload APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: InstaFollowers-APK
+        path: bin/*.apk
