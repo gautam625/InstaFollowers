@@ -33,10 +33,19 @@ jobs:
 
     - name: Set up Android SDK
       run: |
+        # Install Android SDK if not already installed
+        mkdir -p $HOME/android-sdk
+        cd $HOME/android-sdk
+        wget https://dl.google.com/android/repository/commandlinetools-linux-7583922_latest.zip
+        unzip commandlinetools-linux-7583922_latest.zip
+        rm commandlinetools-linux-7583922_latest.zip
+
+        # Accept licenses and install required packages
         export ANDROID_HOME=$HOME/android-sdk
         echo "ANDROID_HOME=$ANDROID_HOME" >> $GITHUB_ENV
-        yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
-        $ANDROID_HOME/tools/bin/sdkmanager "platform-tools" "build-tools;36.0.0" "platforms;android-30" "extras;google;m2repository" "extras;android;m2repository" "system-images;android-30;google_apis;x86_64"
+
+        yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
+        $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platform-tools" "build-tools;36.0.0" "platforms;android-30" "extras;google;m2repository" "extras;android;m2repository" "system-images;android-30;google_apis;x86_64"
 
     - name: Build APK
       run: |
