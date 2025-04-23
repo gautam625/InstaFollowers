@@ -1,0 +1,8 @@
+export ANDROID_HOME=$HOME/android-sdk
+echo "ANDROID_HOME=$ANDROID_HOME" >> $GITHUB_ENV
+
+# Update sdkmanager path to cmdline-tools
+yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
+
+# Install necessary components
+$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platform-tools" "build-tools;36.0.0" "platforms;android-30" "extras;google;m2repository" "extras;android;m2repository" "system-images;android-30;google_apis;x86_64"
