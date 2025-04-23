@@ -42,17 +42,23 @@ jobs:
         unzip commandlinetools-linux-7583922_latest.zip
         rm commandlinetools-linux-7583922_latest.zip
 
+        # Debugging step: List directory structure to check where sdkmanager is
+        ls -R $HOME/android-sdk
+
         # Set environment variables
         export ANDROID_HOME=$HOME/android-sdk
-        export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
+        export PATH=$PATH:$ANDROID_HOME/cmdline-tools/bin
         echo "ANDROID_HOME=$ANDROID_HOME" >> $GITHUB_ENV
         echo "PATH=$PATH" >> $GITHUB_ENV
 
+        # Debugging step: Check if sdkmanager is in the expected path
+        ls $ANDROID_HOME/cmdline-tools/bin
+
         # Accept licenses
-        yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
+        yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager --licenses
 
         # Install necessary Android SDK components
-        $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platform-tools" "build-tools;36.0.0" "platforms;android-30" "extras;google;m2repository" "extras;android;m2repository" "system-images;android-30;google_apis;x86_64"
+        $ANDROID_HOME/cmdline-tools/bin/sdkmanager "platform-tools" "build-tools;36.0.0" "platforms;android-30" "extras;google;m2repository" "extras;android;m2repository" "system-images;android-30;google_apis;x86_64"
 
     - name: Build APK
       run: |
