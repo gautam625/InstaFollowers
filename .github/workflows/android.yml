@@ -22,18 +22,17 @@ jobs:
         sudo apt update
         sudo apt install -y build-essential ccache git zip unzip openjdk-17-jdk python3-pip python3-setuptools libffi-dev libssl-dev libxml2-dev libxslt1-dev zlib1g-dev
 
-    - name: Install Buildozer and Cython
+    - name: Install Buildozer and dependencies
       run: |
-        python3 -m pip install --upgrade pip
+        pip install --upgrade pip
         pip install cython==0.29.33 virtualenv
         pip install buildozer
 
     - name: Build APK
-      run: |
-        buildozer android debug
+      run: buildozer android debug
 
     - name: Upload APK
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: InstaFollowers-APK
         path: bin/*.apk
